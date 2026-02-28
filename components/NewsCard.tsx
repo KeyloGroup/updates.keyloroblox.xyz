@@ -1,24 +1,28 @@
 import Link from "next/link";
-import Badge from "./Badge";
+import Image from "next/image";
+import { PostMeta } from "@/lib/posts";
 
-export default function NewsCard({ post }: any) {
+export default function NewsCard({ post }: { post: PostMeta }) {
   return (
-    <Link href={`/news/${post.slug}`} className="card">
-      {post.banner && (
-        <img src={post.banner} className="card-banner" alt="Banner" />
-      )}
-
-      <div className="card-content">
-        <div className="badge-group">
-          {post.tags?.map((tag: string) => (
-            <Badge key={tag} text={tag} />
+    <Link href={`/news/${post.slug}`} className="news-card">
+      <div className="news-card-banner">
+        <Image
+          src={post.banner || "/images/demo-banner.png"}
+          alt={post.title}
+          width={400}
+          height={225}
+          className="news-card-image"
+          style={{ objectFit: 'cover' }}
+        />
+      </div>
+      <div className="news-card-details">
+        <span className="news-card-date">{post.date}</span>
+        <h3 className="news-card-title">{post.title}</h3>
+        <div className="news-card-tags">
+          {post.tags?.slice(0, 2).map(tag => (
+            <span key={tag} className="tag-pill">{tag}</span>
           ))}
         </div>
-
-        <h2>{post.title}</h2>
-        <p className="meta">
-          {post.author} • {post.date}
-        </p>
       </div>
     </Link>
   );

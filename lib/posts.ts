@@ -1,3 +1,4 @@
+// app/lib/posts.ts
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -7,13 +8,22 @@ import gfm from "remark-gfm";
 
 const postsDirectory = path.join(process.cwd(), "content");
 
+/* =========================
+   POST TYPES
+========================= */
 export interface PostMeta {
   slug: string;
   title: string;
   date: string;
-  banner?: string;
+  banner?: string;       // optional banner
   tags?: string[];
   robloxId: number;
+}
+
+export interface Post extends PostMeta {
+  content: string;
+  authorName: string;
+  authorAvatar: string;
 }
 
 /* =========================
@@ -59,16 +69,14 @@ export function getAllPosts(): PostMeta[] {
   });
 
   return posts.sort(
-    (a, b) =>
-      new Date(b.date).getTime() -
-      new Date(a.date).getTime()
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 }
 
 /* =========================
    GET SINGLE POST
 ========================= */
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string): Promise<Post | null> {
   const fullPath = path.join(postsDirectory, `${slug}.md`);
   if (!fs.existsSync(fullPath)) return null;
 
@@ -85,7 +93,11 @@ export async function getPostBySlug(slug: string) {
   return {
     slug,
     content: processedContent.toString(),
-    ...data,
+    title: data.title,
+    date: data.date,
+    banner: data.banner,      // optional
+    tags: data.tags,
+    robloxId: data.robloxId,
     authorName: robloxUser.username,
     authorAvatar: robloxUser.avatar
   };

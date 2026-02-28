@@ -17,16 +17,16 @@ export default async function NewsPost({ params }: Props) {
 
   return (
     <article className="post">
-      {/* Banner - Slimmer cinematic aspect ratio */}
+      {/* Banner - Slimmer cinematic ratio */}
       <div className="post-banner-container">
         <Image
           src={post.banner || FALLBACK_BANNER}
           alt={post.title || "Banner"}
-          width={1200}   
-          height={400}   // Reduced height for a slimmer look
+          width={1200}
+          height={400} // Reduced height for a slimmer look
           className="post-banner"
           priority
-          style={{ objectFit: 'cover', borderRadius: '12px' }}
+          style={{ objectFit: 'cover' }}
         />
       </div>
 

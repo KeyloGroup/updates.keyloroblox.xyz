@@ -18,9 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* The .hero class now uses the /images/demo-banner.png 
-          as a background via globals.css 
-        */}
+        {/* Hero Header - Controlled by .hero in globals.css */}
         <header className="hero">
           <div className="container hero-inner">
             <h1>Keylo News Center</h1>

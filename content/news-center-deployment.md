@@ -3,7 +3,7 @@ title: "Keylo News Center Deployment"
 date: "February 28, 2026"
 author: "Keylo Product Team"
 robloxId: 8319341580
-banner: "/images/banner-demo.png" 
+banner: "/images/demo-banner.png" 
 tags: ["Announcement", "Platform Update", "Deployment"]
 ---
 

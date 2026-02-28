@@ -1,4 +1,3 @@
-// app/lib/posts.ts
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -15,7 +14,7 @@ export interface PostMeta {
   slug: string;
   title: string;
   date: string;
-  banner?: string;       // optional banner
+  banner?: string; // optional
   tags?: string[];
   robloxId: number;
 }
@@ -95,7 +94,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     content: processedContent.toString(),
     title: data.title,
     date: data.date,
-    banner: data.banner,      // optional
+    banner: data.banner, // optional
     tags: data.tags,
     robloxId: data.robloxId,
     authorName: robloxUser.username,

@@ -1,5 +1,5 @@
-import { getUpdates } from "@/lib/getUpdates";
-import UpdateCard from "@/components/UpdateCard";
+import { getUpdates } from "../lib/getUpdates";
+import UpdateCard from "../components/UpdateCard";
 
 export default function Page() {
   const updates = getUpdates();

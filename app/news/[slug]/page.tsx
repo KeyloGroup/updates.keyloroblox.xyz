@@ -1,4 +1,3 @@
-// app/news/[slug]/page.tsx
 import { getPostBySlug, getAllPosts, Post } from "@/lib/posts";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { notFound } from "next/navigation";
@@ -8,8 +7,7 @@ interface Props {
   params: { slug: string };
 }
 
-// default fallback banner if post.banner is missing
-const FALLBACK_BANNER = "/images/default-banner.png";
+const FALLBACK_BANNER = "/images/demo-banner.png";
 
 export default async function NewsPost({ params }: Props) {
   const post: Post | null = await getPostBySlug(params.slug);
@@ -17,24 +15,26 @@ export default async function NewsPost({ params }: Props) {
 
   return (
     <article className="post">
-      {/* Banner */}
-      <Image
-        src={post.banner || FALLBACK_BANNER}
-        alt={post.title || "Banner"}
-        width={1200}   // adjust to your banner size
-        height={400}   // adjust to your banner size
-        className="post-banner"
-        priority
-      />
+      <div className="post-banner-container">
+        <Image
+          src={post.banner || FALLBACK_BANNER}
+          alt={post.title}
+          width={1200}
+          height={500}
+          className="post-banner"
+          priority
+          style={{ width: '100%', height: 'auto', borderRadius: '12px' }}
+        />
+      </div>
 
-      {/* Title */}
       <h1 className="post-title">{post.title}</h1>
 
-      {/* Author */}
       <div className="author">
-        <img
+        <Image
           src={post.authorAvatar}
           alt={post.authorName}
+          width={40}
+          height={40}
           className="author-avatar"
         />
         <div>
@@ -43,13 +43,11 @@ export default async function NewsPost({ params }: Props) {
         </div>
       </div>
 
-      {/* Content */}
       <MarkdownRenderer content={post.content} />
     </article>
   );
 }
 
-// Static generation
 export async function generateStaticParams() {
   const posts = getAllPosts();
   return posts.map((post) => ({

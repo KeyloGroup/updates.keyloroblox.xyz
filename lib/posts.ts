@@ -7,14 +7,11 @@ import gfm from "remark-gfm";
 
 const postsDirectory = path.join(process.cwd(), "content");
 
-/* =========================
-   POST TYPES
-========================= */
 export interface PostMeta {
   slug: string;
   title: string;
   date: string;
-  banner?: string; // optional
+  banner?: string;
   tags?: string[];
   robloxId: number;
 }
@@ -25,33 +22,26 @@ export interface Post extends PostMeta {
   authorAvatar: string;
 }
 
-/* =========================
-   GET ROBLOX USER DATA
-========================= */
 async function getRobloxUser(userId: number) {
-  const userRes = await fetch(
-    `https://users.roblox.com/v1/users/${userId}`,
-    { cache: "force-cache" }
-  );
+  try {
+    const userRes = await fetch(`https://users.roblox.com/v1/users/${userId}`, { cache: "force-cache" });
+    const userData = await userRes.json();
 
-  const userData = await userRes.json();
+    const thumbRes = await fetch(
+      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=true`,
+      { cache: "force-cache" }
+    );
+    const thumbData = await thumbRes.json();
 
-  const thumbRes = await fetch(
-    `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=true`,
-    { cache: "force-cache" }
-  );
-
-  const thumbData = await thumbRes.json();
-
-  return {
-    username: userData.name,
-    avatar: thumbData.data?.[0]?.imageUrl
-  };
+    return {
+      username: userData.name || "Unknown Author",
+      avatar: thumbData.data?.[0]?.imageUrl || "/images/default-avatar.png"
+    };
+  } catch (e) {
+    return { username: "Keylo Team", avatar: "/images/default-avatar.png" };
+  }
 }
 
-/* =========================
-   GET ALL POSTS
-========================= */
 export function getAllPosts(): PostMeta[] {
   const filenames = fs.readdirSync(postsDirectory);
 
@@ -61,20 +51,20 @@ export function getAllPosts(): PostMeta[] {
     const fileContent = fs.readFileSync(filePath, "utf8");
     const { data } = matter(fileContent);
 
+    // EXPLICIT MAPPING: This ensures the banner is captured
     return {
       slug,
-      ...(data as Omit<PostMeta, "slug">)
+      title: data.title || "Untitled",
+      date: data.date || "",
+      banner: data.banner || "/images/demo-banner.png", // Default if missing in MD
+      tags: data.tags || [],
+      robloxId: data.robloxId,
     };
   });
 
-  return posts.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
-/* =========================
-   GET SINGLE POST
-========================= */
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   const fullPath = path.join(postsDirectory, `${slug}.md`);
   if (!fs.existsSync(fullPath)) return null;
@@ -82,11 +72,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  const processedContent = await remark()
-    .use(gfm)
-    .use(html)
-    .process(content);
-
+  const processedContent = await remark().use(gfm).use(html).process(content);
   const robloxUser = await getRobloxUser(data.robloxId);
 
   return {
@@ -94,8 +80,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     content: processedContent.toString(),
     title: data.title,
     date: data.date,
-    banner: data.banner, // optional
-    tags: data.tags,
+    banner: data.banner || "/images/demo-banner.png",
+    tags: data.tags || [],
     robloxId: data.robloxId,
     authorName: robloxUser.username,
     authorAvatar: robloxUser.avatar

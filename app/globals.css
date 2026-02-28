@@ -34,16 +34,18 @@ a {
 }
 
 /* ===============================
-   HERO HEADER (BANNER BACKGROUND)
+   HERO HEADER (FIXED ALIGNMENT)
 ================================= */
 
 .hero {
   position: relative;
-  /* Reduced padding to slim down the header height */
-  padding: 4rem 0; 
+  /* 7rem on top pushes text down from the screen edge */
+  /* 3rem on bottom keeps the overall banner slim */
+  padding: 7rem 0 3rem 0; 
   border-bottom: 1px solid #1e293b;
-  /* Applying the banner as background with a dark overlay for readability */
-  background-image: linear-gradient(rgba(2, 6, 23, 0.75), rgba(11, 18, 32, 0.85)), 
+  
+  /* Banner Background with Dark Overlay for Readability */
+  background-image: linear-gradient(rgba(2, 6, 23, 0.7), rgba(11, 18, 32, 0.8)), 
                     url('/images/demo-banner.png');
   background-size: cover;
   background-position: center;
@@ -54,12 +56,14 @@ a {
   margin: 0;
   font-weight: 800;
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero-inner p {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   opacity: 0.8;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  max-width: 600px;
 }
 
 /* ===============================
@@ -184,16 +188,18 @@ a {
 
 .post-banner {
   display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
 .post-title {
   font-size: 2.25rem;
   margin-bottom: 1rem;
   font-weight: 800;
-  letter-spacing: -0.01em;
 }
 
-/* Author */
+/* Author Section */
 
 .author {
   display: flex;
@@ -226,7 +232,7 @@ a {
 
 @media (max-width: 768px) {
   .hero {
-    padding: 3rem 0;
+    padding: 4rem 0 2rem 0;
   }
 
   .hero-inner h1 {

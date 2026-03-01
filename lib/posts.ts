@@ -51,7 +51,6 @@ export function getAllPosts(): PostMeta[] {
     const fileContent = fs.readFileSync(filePath, "utf8");
     const { data } = matter(fileContent);
 
-    // EXPLICIT MAPPING: This ensures the banner is captured
     return {
       slug,
       title: data.title || "Untitled",

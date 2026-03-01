@@ -55,7 +55,7 @@ export function getAllPosts(): PostMeta[] {
       slug,
       title: data.title || "Untitled",
       date: data.date || "",
-      banner: data.banner || "/images/demo-banner.png", // Default if missing in MD
+      banner: data.banner || "/images/demo-banner.png",
       tags: data.tags || [],
       robloxId: data.robloxId,
     };
